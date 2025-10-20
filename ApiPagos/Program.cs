@@ -1,4 +1,12 @@
+using Microsoft.EntityFrameworkCore;
+using ApiPagos.Data;
+using ApiPagos.Models;
+using BuildingBlocks.DTOs; // RegistroPagoDto
+
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddDbContext<PagosDbContext>(opt =>
+    opt.UseSqlServer(builder.Configuration.GetConnectionString("Sql")));
 
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -15,6 +23,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.Run();
 
 var summaries = new[]
 {

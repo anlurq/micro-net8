@@ -5,5 +5,5 @@ public record PagoProcesadoEvent(
     string NombreCliente,
     int IdPago,
     decimal MontoPago,
-    FormaPago FormaPago
+    int FormaPago
 );

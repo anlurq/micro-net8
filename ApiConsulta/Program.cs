@@ -1,4 +1,9 @@
+using ApiConsulta.Data;
+
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.Configure<MongoSettings>(builder.Configuration.GetSection("Mongo"));
+builder.Services.AddSingleton<ConsultasRepository>();
 
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -15,6 +20,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.Run();
 
 var summaries = new[]
 {

@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "yXmvLwbghZy7pm4U0FCfPAxrLMWGGHG7H8yauJg65H0=",
+  "Source": "ApiPagos",
+  "BasePath": "_content/ApiPagos",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}

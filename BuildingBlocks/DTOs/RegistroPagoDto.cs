@@ -4,5 +4,5 @@ public record RegistroPagoDto(
     int IdCliente,
     int IdPedido,
     decimal MontoPago,
-    FormaPago FormaPago
+    int FormaPago
 );
