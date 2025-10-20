@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "sH4QlxMYvRbcddL2elF36GXg+gue6+i49ruZD2xO7uiE1uGK2ImNPBbdKPwMpmb+AUQv+TmQ5wXWGYBe/w1Ihw==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\anlur\\OneDrive\\BCP\\Personal\\Cursos\\202510_Microservicios\\Final\\micro-net8\\BuildingBlocks\\BuildingBlocks.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\anlur\\.nuget\\packages\\fluentvalidation\\12.0.0\\fluentvalidation.12.0.0.nupkg.sha512"
+  ],
+  "logs": []
+}
