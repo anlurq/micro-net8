@@ -25,10 +25,7 @@ namespace ApiPedidos.Migrations
             modelBuilder.Entity("ApiPedidos.Models.Cliente", b =>
                 {
                     b.Property<int>("IdCliente")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdCliente"));
 
                     b.Property<string>("NombreCliente")
                         .IsRequired()

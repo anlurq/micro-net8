@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ApiPedidos.Migrations
 {
     [DbContext(typeof(PedidosDbContext))]
-    [Migration("20251020064112_InitialCreate")]
+    [Migration("20251020083321_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -28,10 +28,7 @@ namespace ApiPedidos.Migrations
             modelBuilder.Entity("ApiPedidos.Models.Cliente", b =>
                 {
                     b.Property<int>("IdCliente")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdCliente"));
 
                     b.Property<string>("NombreCliente")
                         .IsRequired()

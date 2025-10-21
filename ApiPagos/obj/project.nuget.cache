@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "y55x0ILwbdgsKRIX7qGs0JqW2b1ZliVi+Dme/sVxrij1MXW8vZMq94NWCd245Y2v9KXHfYirjYDU9zbL4DfNzA==",
+  "dgSpecHash": "AOXL4XeFGEb3nTJOLg1J2sMuT+1eeRfo+RjUR7SR1BWWKv1mQ1Kj3rBJGwQysS6fRfpsB6lLuI+Ubps0+N+zgg==",
   "success": true,
   "projectFilePath": "C:\\Users\\anlur\\OneDrive\\BCP\\Personal\\Cursos\\202510_Microservicios\\Final\\micro-net8\\ApiPagos\\ApiPagos.csproj",
   "expectedPackageFiles": [
@@ -66,6 +66,7 @@
     "C:\\Users\\anlur\\.nuget\\packages\\opentelemetry.exporter.jaeger\\1.5.1\\opentelemetry.exporter.jaeger.1.5.1.nupkg.sha512",
     "C:\\Users\\anlur\\.nuget\\packages\\opentelemetry.extensions.hosting\\1.13.1\\opentelemetry.extensions.hosting.1.13.1.nupkg.sha512",
     "C:\\Users\\anlur\\.nuget\\packages\\opentelemetry.instrumentation.aspnetcore\\1.12.0\\opentelemetry.instrumentation.aspnetcore.1.12.0.nupkg.sha512",
+    "C:\\Users\\anlur\\.nuget\\packages\\opentelemetry.instrumentation.http\\1.12.0\\opentelemetry.instrumentation.http.1.12.0.nupkg.sha512",
     "C:\\Users\\anlur\\.nuget\\packages\\swashbuckle.aspnetcore\\6.6.2\\swashbuckle.aspnetcore.6.6.2.nupkg.sha512",
     "C:\\Users\\anlur\\.nuget\\packages\\swashbuckle.aspnetcore.swagger\\6.6.2\\swashbuckle.aspnetcore.swagger.6.6.2.nupkg.sha512",
     "C:\\Users\\anlur\\.nuget\\packages\\swashbuckle.aspnetcore.swaggergen\\6.6.2\\swashbuckle.aspnetcore.swaggergen.6.6.2.nupkg.sha512",

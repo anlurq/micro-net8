@@ -1,12 +1,12 @@
+C:\Users\anlur\OneDrive\BCP\Personal\Cursos\202510_Microservicios\Final\micro-net8\BuildingBlocks\bin\Debug\net8.0\BuildingBlocks.deps.json
+C:\Users\anlur\OneDrive\BCP\Personal\Cursos\202510_Microservicios\Final\micro-net8\BuildingBlocks\bin\Debug\net8.0\BuildingBlocks.dll
+C:\Users\anlur\OneDrive\BCP\Personal\Cursos\202510_Microservicios\Final\micro-net8\BuildingBlocks\bin\Debug\net8.0\BuildingBlocks.pdb
 C:\Users\anlur\OneDrive\BCP\Personal\Cursos\202510_Microservicios\Final\micro-net8\BuildingBlocks\obj\Debug\net8.0\BuildingBlocks.csproj.AssemblyReference.cache
 C:\Users\anlur\OneDrive\BCP\Personal\Cursos\202510_Microservicios\Final\micro-net8\BuildingBlocks\obj\Debug\net8.0\BuildingBlocks.GeneratedMSBuildEditorConfig.editorconfig
 C:\Users\anlur\OneDrive\BCP\Personal\Cursos\202510_Microservicios\Final\micro-net8\BuildingBlocks\obj\Debug\net8.0\BuildingBlocks.AssemblyInfoInputs.cache
 C:\Users\anlur\OneDrive\BCP\Personal\Cursos\202510_Microservicios\Final\micro-net8\BuildingBlocks\obj\Debug\net8.0\BuildingBlocks.AssemblyInfo.cs
 C:\Users\anlur\OneDrive\BCP\Personal\Cursos\202510_Microservicios\Final\micro-net8\BuildingBlocks\obj\Debug\net8.0\BuildingBlocks.csproj.CoreCompileInputs.cache
 C:\Users\anlur\OneDrive\BCP\Personal\Cursos\202510_Microservicios\Final\micro-net8\BuildingBlocks\obj\Debug\net8.0\BuildingBlocks.sourcelink.json
-C:\Users\anlur\OneDrive\BCP\Personal\Cursos\202510_Microservicios\Final\micro-net8\BuildingBlocks\bin\Debug\net8.0\BuildingBlocks.deps.json
-C:\Users\anlur\OneDrive\BCP\Personal\Cursos\202510_Microservicios\Final\micro-net8\BuildingBlocks\bin\Debug\net8.0\BuildingBlocks.dll
-C:\Users\anlur\OneDrive\BCP\Personal\Cursos\202510_Microservicios\Final\micro-net8\BuildingBlocks\bin\Debug\net8.0\BuildingBlocks.pdb
 C:\Users\anlur\OneDrive\BCP\Personal\Cursos\202510_Microservicios\Final\micro-net8\BuildingBlocks\obj\Debug\net8.0\BuildingBlocks.dll
 C:\Users\anlur\OneDrive\BCP\Personal\Cursos\202510_Microservicios\Final\micro-net8\BuildingBlocks\obj\Debug\net8.0\refint\BuildingBlocks.dll
 C:\Users\anlur\OneDrive\BCP\Personal\Cursos\202510_Microservicios\Final\micro-net8\BuildingBlocks\obj\Debug\net8.0\BuildingBlocks.pdb

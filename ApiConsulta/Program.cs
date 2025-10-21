@@ -1,50 +1,55 @@
 using ApiConsulta.Data;
+using ApiConsulta.Messaging;
+using BuildingBlocks.Contracts;
+using MassTransit;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Mongo
 builder.Services.Configure<MongoSettings>(builder.Configuration.GetSection("Mongo"));
 builder.Services.AddSingleton<ConsultasRepository>();
 
-// Add services to the container.
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+// Swagger
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+// RabbitMQ + MassTransit
+var rabbitHost = builder.Configuration["RabbitMQ:Host"]!;
+builder.Services.AddMassTransit(x =>
+{
+    x.AddConsumer<PagoProcesadoConsumer>();
+
+    x.UsingRabbitMq((ctx, cfg) =>
+    {
+        cfg.Host(new Uri(rabbitHost));
+
+        // Cola de consumo con nombre fijo + binding explícito al contrato
+        cfg.ReceiveEndpoint("api-consulta-pagos", e =>
+        {
+            e.ConfigureConsumer<PagoProcesadoConsumer>(ctx);
+            e.Bind<PagoProcesadoEvent>();
+        });
+    });
+});
+
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+// Swagger sólo en dev
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
 
+// Si te molesta el warning de HTTPS, puedes comentar la siguiente línea en dev:
 app.UseHttpsRedirection();
-app.Run();
 
-var summaries = new[]
+// Endpoints
+app.MapGet("/consulta", async (ConsultasRepository repo) =>
 {
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
-
-app.MapGet("/weatherforecast", () =>
-{
-    var forecast =  Enumerable.Range(1, 5).Select(index =>
-        new WeatherForecast
-        (
-            DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-            Random.Shared.Next(-20, 55),
-            summaries[Random.Shared.Next(summaries.Length)]
-        ))
-        .ToArray();
-    return forecast;
+    var docs = await repo.ListAllAsync();
+    return Results.Ok(docs);
 })
-.WithName("GetWeatherForecast")
-.WithOpenApi();
+.WithName("GetConsultas");
 
 app.Run();
-
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}

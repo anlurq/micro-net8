@@ -15,8 +15,7 @@ namespace ApiPedidos.Migrations
                 name: "Clientes",
                 columns: table => new
                 {
-                    IdCliente = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    IdCliente = table.Column<int>(type: "int", nullable: false),
                     NombreCliente = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false)
                 },
                 constraints: table =>

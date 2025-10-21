@@ -59,6 +59,7 @@ C:\Users\anlur\OneDrive\BCP\Personal\Cursos\202510_Microservicios\Final\micro-ne
 C:\Users\anlur\OneDrive\BCP\Personal\Cursos\202510_Microservicios\Final\micro-net8\ApiPagos\bin\Debug\net8.0\OpenTelemetry.Exporter.Jaeger.dll
 C:\Users\anlur\OneDrive\BCP\Personal\Cursos\202510_Microservicios\Final\micro-net8\ApiPagos\bin\Debug\net8.0\OpenTelemetry.Extensions.Hosting.dll
 C:\Users\anlur\OneDrive\BCP\Personal\Cursos\202510_Microservicios\Final\micro-net8\ApiPagos\bin\Debug\net8.0\OpenTelemetry.Instrumentation.AspNetCore.dll
+C:\Users\anlur\OneDrive\BCP\Personal\Cursos\202510_Microservicios\Final\micro-net8\ApiPagos\bin\Debug\net8.0\OpenTelemetry.Instrumentation.Http.dll
 C:\Users\anlur\OneDrive\BCP\Personal\Cursos\202510_Microservicios\Final\micro-net8\ApiPagos\bin\Debug\net8.0\Swashbuckle.AspNetCore.Swagger.dll
 C:\Users\anlur\OneDrive\BCP\Personal\Cursos\202510_Microservicios\Final\micro-net8\ApiPagos\bin\Debug\net8.0\Swashbuckle.AspNetCore.SwaggerGen.dll
 C:\Users\anlur\OneDrive\BCP\Personal\Cursos\202510_Microservicios\Final\micro-net8\ApiPagos\bin\Debug\net8.0\Swashbuckle.AspNetCore.SwaggerUI.dll

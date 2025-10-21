@@ -13,6 +13,7 @@ public class PedidosDbContext(DbContextOptions<PedidosDbContext> options) : DbCo
         modelBuilder.Entity<Cliente>(e =>
         {
             e.HasKey(x => x.IdCliente);
+            e.Property(x => x.IdCliente).ValueGeneratedNever();
             e.Property(x => x.NombreCliente).HasMaxLength(100).IsRequired();
         });
 

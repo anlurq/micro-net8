@@ -2,52 +2,61 @@ using Microsoft.EntityFrameworkCore;
 using ApiPagos.Data;
 using ApiPagos.Models;
 using BuildingBlocks.DTOs; // RegistroPagoDto
+using OpenTelemetry.Resources;
+using OpenTelemetry.Trace;
+using OpenTelemetry.Instrumentation.Http;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<PagosDbContext>(opt =>
     opt.UseSqlServer(builder.Configuration.GetConnectionString("Sql")));
 
-// Add services to the container.
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddOpenTelemetry()
+    .ConfigureResource(r => r.AddService(serviceName: "ApiPagos")) // cambia a "ApiPagos" en ApiPagos
+    .WithTracing(t => t
+        .AddAspNetCoreInstrumentation()
+        .AddHttpClientInstrumentation()
+        .AddJaegerExporter(o =>
+        {
+            o.AgentHost = "localhost";
+            o.AgentPort = 6831;
+        })
+    );
+
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
-app.Run();
-
-var summaries = new[]
+app.MapPost("/pago", async (RegistroPagoDto dto, PagosDbContext db) =>
 {
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
+    // Validación mínima
+    if (dto.IdCliente <= 0 || dto.IdPedido <= 0 || dto.MontoPago <= 0 || dto.FormaPago is < 1 or > 3)
+        return Results.ValidationProblem(new Dictionary<string, string[]>
+        {
+            ["IdCliente/IdPedido/MontoPago/FormaPago"] = new[] { "Valores inválidos." }
+        });
 
-app.MapGet("/weatherforecast", () =>
-{
-    var forecast =  Enumerable.Range(1, 5).Select(index =>
-        new WeatherForecast
-        (
-            DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-            Random.Shared.Next(-20, 55),
-            summaries[Random.Shared.Next(summaries.Length)]
-        ))
-        .ToArray();
-    return forecast;
+    var pago = new Pago
+    {
+        IdCliente = dto.IdCliente,
+        IdPedido = dto.IdPedido,
+        MontoPago = dto.MontoPago,
+        FormaPago = dto.FormaPago,
+        FechaPago = DateTime.UtcNow
+    };
+
+    db.Pagos.Add(pago);
+    await db.SaveChangesAsync();
+
+    return Results.Ok(new { idPago = pago.IdPago });
 })
-.WithName("GetWeatherForecast")
-.WithOpenApi();
+.WithName("RegistrarPago");
 
 app.Run();
-
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}
