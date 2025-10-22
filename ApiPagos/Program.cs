@@ -5,14 +5,26 @@ using BuildingBlocks.DTOs; // RegistroPagoDto
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
 using OpenTelemetry.Instrumentation.Http;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<PagosDbContext>(opt =>
-    opt.UseSqlServer(builder.Configuration.GetConnectionString("Sql")));
+    opt.UseSqlServer(
+        builder.Configuration.GetConnectionString("Sql"),
+        sql => sql.EnableRetryOnFailure(
+            maxRetryCount: 5,
+            maxRetryDelay: TimeSpan.FromSeconds(10),
+            errorNumbersToAdd: null
+        )
+    )
+);
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+var jaegerHost = builder.Configuration["Jaeger:Host"] ?? "localhost";
+var jaegerPort = int.TryParse(builder.Configuration["Jaeger:Port"], out var p) ? p : 6831;
 
 builder.Services.AddOpenTelemetry()
     .ConfigureResource(r => r.AddService(serviceName: "ApiPagos")) // cambia a "ApiPagos" en ApiPagos
@@ -21,10 +33,18 @@ builder.Services.AddOpenTelemetry()
         .AddHttpClientInstrumentation()
         .AddJaegerExporter(o =>
         {
-            o.AgentHost = "localhost";
-            o.AgentPort = 6831;
+            o.AgentHost = jaegerHost;
+            o.AgentPort = jaegerPort;
         })
     );
+
+// Serilog: lee configuración (JSON + env)
+Log.Logger = new LoggerConfiguration()
+    .ReadFrom.Configuration(builder.Configuration)
+    .Enrich.FromLogContext()
+    .CreateLogger();
+
+builder.Host.UseSerilog(Log.Logger);
 
 var app = builder.Build();
 
@@ -32,6 +52,13 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+}
+
+// Aplicar migraciones de EF en arranque (Pagos)
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<ApiPagos.Data.PagosDbContext>();
+    db.Database.Migrate();
 }
 
 app.MapPost("/pago", async (RegistroPagoDto dto, PagosDbContext db) =>

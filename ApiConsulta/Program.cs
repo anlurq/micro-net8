@@ -2,6 +2,7 @@ using ApiConsulta.Data;
 using ApiConsulta.Messaging;
 using BuildingBlocks.Contracts;
 using MassTransit;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,16 +15,13 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 // RabbitMQ + MassTransit
-var rabbitHost = builder.Configuration["RabbitMQ:Host"]!;
+var rabbitHost = builder.Configuration["RabbitMQ:Host"] ?? "amqp://guest:guest@localhost:5672";
 builder.Services.AddMassTransit(x =>
 {
     x.AddConsumer<PagoProcesadoConsumer>();
-
     x.UsingRabbitMq((ctx, cfg) =>
     {
         cfg.Host(new Uri(rabbitHost));
-
-        // Cola de consumo con nombre fijo + binding explícito al contrato
         cfg.ReceiveEndpoint("api-consulta-pagos", e =>
         {
             e.ConfigureConsumer<PagoProcesadoConsumer>(ctx);
@@ -31,6 +29,14 @@ builder.Services.AddMassTransit(x =>
         });
     });
 });
+
+// Serilog: lee configuración (JSON + env)
+Log.Logger = new LoggerConfiguration()
+    .ReadFrom.Configuration(builder.Configuration)
+    .Enrich.FromLogContext()
+    .CreateLogger();
+
+builder.Host.UseSerilog(Log.Logger);
 
 var app = builder.Build();
 

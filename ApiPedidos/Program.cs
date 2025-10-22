@@ -8,12 +8,21 @@ using MassTransit;
 using BuildingBlocks.Contracts;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // DbContext
 builder.Services.AddDbContext<PedidosDbContext>(opt =>
-    opt.UseSqlServer(builder.Configuration.GetConnectionString("Sql")));
+    opt.UseSqlServer(
+        builder.Configuration.GetConnectionString("Sql"),
+        sql => sql.EnableRetryOnFailure(
+            maxRetryCount: 5,
+            maxRetryDelay: TimeSpan.FromSeconds(10),
+            errorNumbersToAdd: null
+        )
+    )
+);
 
 // HttpClient para ApiPagos
 builder.Services.AddHttpClient("ApiPagos", client =>
@@ -26,14 +35,17 @@ builder.Services.AddHttpClient("ApiPagos", client =>
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-var rabbitHost = builder.Configuration["RabbitMQ:Host"]!;
+var rabbitHost = builder.Configuration["RabbitMQ:Host"] ?? "amqp://guest:guest@localhost:5672";
 builder.Services.AddMassTransit(x =>
 {
     x.UsingRabbitMq((ctx, cfg) =>
     {
-        cfg.Host(new Uri("amqp://guest:guest@localhost:5672"));
+        cfg.Host(new Uri(rabbitHost));
     });
 });
+
+var jaegerHost = builder.Configuration["Jaeger:Host"] ?? "localhost";
+var jaegerPort = int.TryParse(builder.Configuration["Jaeger:Port"], out var p) ? p : 6831;
 
 builder.Services.AddOpenTelemetry()
     .ConfigureResource(r => r.AddService(serviceName: "ApiPedidos")) // cambia a "ApiPagos" en ApiPagos
@@ -42,13 +54,28 @@ builder.Services.AddOpenTelemetry()
         .AddHttpClientInstrumentation()
         .AddJaegerExporter(o =>
         {
-            o.AgentHost = "localhost";
-            o.AgentPort = 6831;
+            o.AgentHost = jaegerHost;
+            o.AgentPort = jaegerPort;
         })
     );
 
+// Serilog: lee configuración (JSON + env)
+Log.Logger = new LoggerConfiguration()
+    .ReadFrom.Configuration(builder.Configuration)
+    .Enrich.FromLogContext()
+    .CreateLogger();
+
+builder.Host.UseSerilog(Log.Logger);
+
 var app = builder.Build();
 if (app.Environment.IsDevelopment()) { app.UseSwagger(); app.UseSwaggerUI(); }
+
+// Aplicar migraciones de EF en arranque (Pedidos)
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<ApiPedidos.Data.PedidosDbContext>();
+    db.Database.Migrate();
+}
 
 app.MapPost("/procesa", async (
     SolicitudProcesaPedidoDto dto,
